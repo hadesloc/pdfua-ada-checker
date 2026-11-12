@@ -26,8 +26,8 @@ GOOGLE_FORM_URL = (
     "https://docs.google.com/forms/d/e/1FAIpQLSfC50VFJdc55ug-sNpJON59JL9By6yIuRe8qysotQLX1cNtFA/viewform"
 )
 UPWORK_CATALOG_URL = "https://www.upwork.com/services/product/2120536307204819908"
-CHECKOUT_65_URL = "https://buy.polar.sh/polar_cl_C3deLclnq4kNrRs9ZZ3IGrSpa9iUNW2VSdSCJ3ac4RF"
-CHECKOUT_195_URL = "https://buy.polar.sh/polar_cl_lLK2oTyroQXetdd9LuiAsJ5l6wWxegeyYg6904Ioayg"
+CHECKOUT_65_URL = "https://pdfuapartnerdesk.gumroad.com/l/pdfua-remediation-12-pages"
+CHECKOUT_195_URL = "https://pdfuapartnerdesk.gumroad.com/l/pdfua-remediation-30-pages"
 CONTACT_EMAIL = "halocrypto101@gmail.com"
 
 CLAUSE_GUIDE: dict[str, dict[str, str]] = {
@@ -799,6 +799,7 @@ INDEX_HTML = r"""<!doctype html>
         <a id="cta-form" class="btn btn-brand" href="#" target="_blank" rel="noopener">Request Free 24h Sample PDF Fix</a>
         <a id="cta-mailto" class="btn btn-sec" href="#">Email Exact Quote Breakdown</a>
       </div>
+      <p style="margin:10px 0 0; font-size:0.8rem; color:var(--muted);">🔒 Secure checkout by Gumroad</p>
     </div>
 
     <div class="card">
