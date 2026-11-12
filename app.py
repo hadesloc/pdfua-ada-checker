@@ -26,8 +26,8 @@ GOOGLE_FORM_URL = (
     "https://docs.google.com/forms/d/e/1FAIpQLSfC50VFJdc55ug-sNpJON59JL9By6yIuRe8qysotQLX1cNtFA/viewform"
 )
 UPWORK_CATALOG_URL = "https://www.upwork.com/services/product/2120536307204819908"
-CHECKOUT_65_URL = "https://www.creem.io/payment/prod_1ro2PKpF1QJQFmoZytUQR1"
-CHECKOUT_195_URL = "https://www.creem.io/payment/prod_6Ox9BnrneJMxVIXRXipyAD"
+CHECKOUT_65_URL = "https://buy.polar.sh/polar_cl_C3deLclnq4kNrRs9ZZ3IGrSpa9iUNW2VSdSCJ3ac4RF"
+CHECKOUT_195_URL = "https://buy.polar.sh/polar_cl_lLK2oTyroQXetdd9LuiAsJ5l6wWxegeyYg6904Ioayg"
 CONTACT_EMAIL = "halocrypto101@gmail.com"
 
 CLAUSE_GUIDE: dict[str, dict[str, str]] = {
@@ -168,7 +168,7 @@ def _run_verapdf(pdf_path: Path) -> dict[str, Any]:
     java_bin, jar_path = discovered
     cmd = [
         java_bin,
-        "-Xmx360m",
+        "-Xmx512m",
         "-Dfile.encoding=UTF8",
         "-XX:+IgnoreUnrecognizedVMOptions",
         "--add-exports=java.base/sun.security.pkcs=ALL-UNNAMED",
