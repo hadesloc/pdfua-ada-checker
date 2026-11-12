@@ -12,6 +12,10 @@ short_description: Free ISO 14289-1 (PDF/UA-1), WCAG 2.1 AA & Section 508 PDF Va
 
 # Free Online PDF/UA-1, ADA Title II & Section 508 PDF Accessibility Checker
 
+**Live Free Web Instances (No Account Required, Zero File Retention):**
+- **Full eraPDF 1.30.3 Hosted Checker:** [https://pdfua-ada-checker.onrender.com](https://pdfua-ada-checker.onrender.com)
+- **Instant Browser + eraPDF Checker Widget:** [https://hadesloc.github.io/pdfua-partner-desk/#free-checker](https://hadesloc.github.io/pdfua-partner-desk/#free-checker)
+
 Upload any PDF (up to **20 MB**) to run a real **veraPDF 1.30.3 (`--flavour ua1`)** ISO 14289-1:2014 machine validation combined with structural inspection for **U.S. DOJ 28 CFR Part 35 (ADA Title II)**, **WCAG 2.1 Level AA**, and **Section 508** compliance.
 
 ### What This Free Checker Inspects
@@ -29,3 +33,4 @@ Upload any PDF (up to **20 MB**) to run a real **veraPDF 1.30.3 (`--flavour ua1`
 - **Request a Free 24-Hour Sample Remediation:** [Google Intake Form](https://docs.google.com/forms/d/e/1FAIpQLSfC50VFJdc55ug-sNpJON59JL9By6yIuRe8qysotQLX1cNtFA/viewform)
 - **Book Fixed-Price Package ($65 / $195 / $390):** [Upwork Project Catalog](https://www.upwork.com/services/product/2120536307204819908)
 - **Direct Engineering Desk:** `halocrypto101@gmail.com`
+
