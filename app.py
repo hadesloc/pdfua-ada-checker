@@ -621,146 +621,343 @@ INDEX_HTML = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Free Online PDF/UA-1, ADA Title II &amp; Section 508 Checker (veraPDF 1.30)</title>
-<meta name="description" content="Instant free PDF accessibility validator powered by veraPDF 1.30 (ISO 14289-1 PDF/UA-1). Check ADA Title II, WCAG 2.1 AA, and Section 508 issues in plain English with zero file retention.">
+<title>Free Online PDF/UA-1, ADA Title II &amp; Section 508 Checker (veraPDF 1.30.3)</title>
+<meta name="description" content="Instant free PDF accessibility validator powered by veraPDF 1.30.3 (ISO 14289-1 PDF/UA-1). Check ADA Title II, WCAG 2.1 AA, and Section 508 issues in plain English with zero file retention.">
 <style>
   :root {
-    --bg: #0b1221;
-    --card: #15223c;
-    --card-alt: #1b2c4d;
-    --line: #293d66;
-    --ink: #f8fafc;
-    --muted: #94a3b8;
-    --brand: #38bdf8;
-    --ok: #22c55e;
-    --ok-bg: rgba(34, 197, 94, 0.14);
-    --err: #f87171;
-    --err-bg: rgba(248, 113, 113, 0.14);
-    --warn: #fbbf24;
-    --warn-bg: rgba(251, 191, 36, 0.14);
+    --bg: #ffffff;
+    --bg-subtle: #f8fafc;
+    --bg-muted: #f1f5f9;
+    --line: #e2e8f0;
+    --line-strong: #cbd5e1;
+    --ink: #0f172a;
+    --ink-2: #334155;
+    --muted: #475569;
+    --brand: #1d4ed8;
+    --brand-hover: #1e40af;
+    --brand-soft: #eff6ff;
+    --ok: #166534;
+    --ok-bg: #f0fdf4;
+    --ok-border: #bbf7d0;
+    --err: #991b1b;
+    --err-bg: #fef2f2;
+    --err-border: #fecaca;
+    --warn: #92400e;
+    --warn-bg: #fffbeb;
+    --warn-border: #fde68a;
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
-    background: radial-gradient(circle at 15% 0%, #162647 0%, var(--bg) 60%);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
     color: var(--ink);
-    line-height: 1.55;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
   }
-  a { color: var(--brand); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 24px 20px 56px; }
-  .topbar {
-    display: flex; align-items: center; justify-content: space-between; gap: 14px;
-    flex-wrap: wrap; padding-bottom: 18px; border-bottom: 1px solid var(--line); margin-bottom: 24px;
+  a { color: var(--brand); text-decoration: underline; text-underline-offset: 3px; }
+  a:hover { color: var(--brand-hover); }
+  a:focus-visible, button:focus-visible, [role="button"]:focus-visible {
+    outline: 3px solid var(--brand);
+    outline-offset: 2px;
   }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.05rem; color: var(--ink); }
-  .dot { width: 11px; height: 11px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 10px var(--ok); }
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 8px;
+    z-index: 9999;
+    background: var(--ink);
+    color: #ffffff;
+    font-weight: 700;
+    padding: 10px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+  }
+  .skip-link:focus { left: 12px; }
+  .site-header {
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 40;
+  }
+  .header-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 650;
+    font-size: 1rem;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .brand:hover { color: var(--ink); text-decoration: none; }
+  .brand-mark {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: var(--brand);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .header-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 40px 24px 56px; }
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--brand);
+    margin-bottom: 8px;
+  }
   .pill {
-    display: inline-block; padding: 4px 11px; border-radius: 999px; font-size: 0.76rem;
-    font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
   }
-  .pill-ok { background: var(--ok-bg); color: #86efac; border: 1px solid rgba(34,197,94,0.45); }
-  .pill-warn { background: var(--warn-bg); color: #fde68a; border: 1px solid rgba(251,191,36,0.45); }
-  .pill-err { background: var(--err-bg); color: #fca5a5; border: 1px solid rgba(248,113,113,0.45); }
-  h1 { font-size: clamp(1.75rem, 3.4vw, 2.55rem); margin: 12px 0 10px; line-height: 1.18; }
-  h1 span { color: var(--brand); }
-  .sublead { color: #cbd5e1; max-width: 760px; margin: 0 0 22px; font-size: 1.02rem; }
+  .pill-ok { background: var(--ok-bg); color: var(--ok); border: 1px solid var(--ok-border); }
+  .pill-warn { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-border); }
+  .pill-err { background: var(--err-bg); color: var(--err); border: 1px solid var(--err-border); }
+  .pill-brand { background: var(--brand-soft); color: #1e3a8a; border: 1px solid #bfdbfe; }
+  h1 {
+    font-size: clamp(1.85rem, 3.2vw, 2.5rem);
+    margin: 4px 0 12px;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+  .sublead { color: var(--ink-2); max-width: 740px; margin: 0 0 28px; font-size: 1.05rem; }
   .dropzone {
-    background: rgba(21, 34, 60, 0.85);
-    border: 2px dashed #3b82f6;
-    border-radius: 16px;
+    background: var(--bg-subtle);
+    border: 1.5px dashed #94a3b8;
+    border-radius: 10px;
     padding: 36px 24px;
     text-align: center;
     cursor: pointer;
-    transition: border-color 0.15s ease, background 0.15s ease;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
   }
-  .dropzone.dragover { border-color: var(--ok); background: rgba(20, 83, 45, 0.28); }
-  .dropzone h2 { margin: 8px 0 6px; font-size: 1.3rem; }
-  .dropzone p { margin: 0 0 16px; color: var(--muted); font-size: 0.92rem; }
+  .dropzone:hover { border-color: var(--brand); background: var(--brand-soft); }
+  .dropzone.dragover { border-color: var(--ok); background: var(--ok-bg); }
+  .chk-icon {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 12px;
+    border-radius: 8px;
+    background: var(--brand-soft);
+    color: var(--brand);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .dropzone h2 { margin: 4px 0 6px; font-size: 1.15rem; color: var(--ink); letter-spacing: -0.015em; }
+  .dropzone p { margin: 0 auto 18px; max-width: 580px; color: var(--muted); font-size: 0.9rem; }
   .btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 12px 20px; border-radius: 10px; font-weight: 700; font-size: 0.94rem;
-    border: 1px solid transparent; cursor: pointer; text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-family: inherit;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
   }
-  .btn:hover { opacity: 0.94; text-decoration: none; }
-  .btn-primary { background: var(--ok); color: #052e16; }
-  .btn-brand { background: var(--brand); color: #082f49; }
-  .btn-sec { background: var(--card-alt); color: var(--ink); border-color: var(--line); }
+  .btn:hover { text-decoration: none; }
+  .btn-primary { background: var(--brand); border-color: var(--brand); color: #ffffff; }
+  .btn-primary:hover { background: var(--brand-hover); border-color: var(--brand-hover); color: #ffffff; }
+  .btn-sec { background: #ffffff; color: var(--ink); border-color: var(--line-strong); }
+  .btn-sec:hover { background: var(--bg-subtle); border-color: #94a3b8; color: var(--ink); }
+  .btn-sm { min-height: 36px; padding: 7px 13px; font-size: 0.82rem; }
   .privacy-strip {
-    display: flex; gap: 18px; justify-content: center; flex-wrap: wrap;
-    margin-top: 14px; font-size: 0.83rem; color: var(--muted);
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 14px;
+    font-size: 0.82rem;
+    color: var(--muted);
   }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 15px; padding: 22px; margin-top: 22px; }
-  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(195px, 1fr)); gap: 14px; margin-top: 18px; }
-  .kpi { background: var(--card-alt); border: 1px solid var(--line); border-radius: 12px; padding: 15px 16px; }
-  .kpi .lbl { font-size: 0.75rem; text-transform: uppercase; color: var(--muted); font-weight: 700; }
-  .kpi .val { font-size: 1.55rem; font-weight: 800; margin: 4px 0 2px; }
-  .kpi .hint { font-size: 0.82rem; color: #cbd5e1; }
+  .privacy-strip span { display: inline-flex; align-items: center; gap: 6px; }
+  .privacy-strip span::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--brand);
+  }
+  .card {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 24px;
+    margin-top: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+  .result-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 18px; }
+  .kpi { background: var(--bg-subtle); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+  .kpi .lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 600; }
+  .kpi .val { font-size: 1.55rem; font-weight: 800; margin: 4px 0 2px; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .kpi .val.ok { color: var(--ok); }
+  .kpi .val.err { color: var(--err); }
+  .kpi .val.brand { color: var(--brand); }
+  .kpi .hint { font-size: 0.82rem; color: var(--ink-2); }
   .cta-banner {
-    background: linear-gradient(145deg, #132c44, #102a20);
-    border: 1px solid rgba(34, 197, 94, 0.55);
-    border-radius: 16px; padding: 24px; margin-top: 22px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--brand);
+    border-radius: 10px;
+    padding: 24px;
+    margin-top: 24px;
   }
-  .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+  .cta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  .mor-note { margin: 10px 0 0; font-size: 0.78rem; color: var(--muted); }
   .issue-item {
-    background: rgba(15, 23, 42, 0.65); border: 1px solid var(--line);
-    border-radius: 12px; padding: 16px 18px; margin-top: 12px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-top: 12px;
+  }
+  .issue-item.issue-pass {
+    background: var(--ok-bg);
+    border-color: var(--ok-border);
   }
   .issue-head { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: center; }
-  .mono { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 0.84rem; }
-  .checks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 14px; }
-  .chk { padding: 10px 12px; border-radius: 9px; background: rgba(15,23,42,0.6); border: 1px solid var(--line); font-size: 0.88rem; }
-  #status-box { display: none; margin-top: 18px; text-align: center; font-weight: 600; color: #7dd3fc; }
-  #error-box { display: none; margin-top: 18px; background: var(--err-bg); border: 1px solid var(--err); color: #fecaca; padding: 14px 18px; border-radius: 12px; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.82rem; color: var(--muted); }
+  .checks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 16px; }
+  .chk {
+    padding: 10px 12px;
+    border-radius: 6px;
+    background: #ffffff;
+    border: 1px solid var(--line);
+    font-size: 0.85rem;
+    color: var(--ink-2);
+  }
+  .chk strong.ok { color: var(--ok); }
+  .chk strong.err { color: var(--err); }
+  #status-box {
+    display: none;
+    margin-top: 18px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    background: var(--brand-soft);
+    border: 1px solid #bfdbfe;
+    text-align: center;
+    font-weight: 600;
+    color: #1e3a8a;
+  }
+  #error-box {
+    display: none;
+    margin-top: 18px;
+    background: var(--err-bg);
+    border: 1px solid var(--err-border);
+    color: var(--err);
+    padding: 14px 18px;
+    border-radius: 8px;
+  }
   #results { display: none; }
-  footer { margin-top: 42px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 0.84rem; color: var(--muted); }
+  footer {
+    margin-top: 48px;
+    padding: 28px 0 12px;
+    border-top: 1px solid var(--line);
+    font-size: 0.84rem;
+    color: var(--muted);
+  }
+  footer a { color: var(--ink-2); font-weight: 600; }
+  @media (max-width: 640px) {
+    .header-inner { padding: 10px 16px; }
+    .wrap { padding: 28px 16px 40px; }
+    .card, .cta-banner { padding: 18px; }
+    .cta-row .btn { width: 100%; }
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="topbar">
-    <a class="brand" href="https://hadesloc.github.io/pdfua-partner-desk/" target="_blank" rel="noopener">
-      <span class="dot"></span>
-      <span>PDF/UA Partner Desk &middot; Free Validator</span>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="https://hadesloc.github.io/pdfua-partner-desk/">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="m9 15 2 2 4-4"></path></svg>
+      </span>
+      <span>PDF/UA Partner Desk</span>
     </a>
-    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
-      <span class="pill pill-warn">DOJ ADA Title II Mandate Active</span>
-      <a class="btn btn-sec" href="https://hadesloc.github.io/pdfua-partner-desk/#calculator" target="_blank" rel="noopener">Agency Rate Calculator</a>
+    <div class="header-actions">
+      <span class="pill pill-brand">veraPDF 1.30.3 Engine</span>
+      <a class="btn btn-sec btn-sm" href="https://hadesloc.github.io/pdfua-partner-desk/#calculator">Wholesale Estimator</a>
+      <a class="btn btn-primary btn-sm" href="https://hadesloc.github.io/pdfua-partner-desk/#free-sample">Free 24h Sample</a>
     </div>
   </div>
+</header>
 
-  <span class="pill pill-ok">Powered by Real veraPDF 1.30.3 (ISO 14289-1:2014)</span>
-  <h1>Free Online <span>PDF/UA-1, ADA Title II &amp; Section 508</span> Compliance Checker</h1>
+<main id="main-content" tabindex="-1" class="wrap">
+  <span class="eyebrow">ISO 14289-1:2014 (PDF/UA-1) &middot; ADA Title II &middot; Section 508</span>
+  <h1>Free Online PDF/UA-1 &amp; WCAG 2.1 AA Compliance Checker</h1>
   <p class="sublead">
-    Test any municipal, university, healthcare, or client PDF in seconds. Get an instant <strong>veraPDF / PAC 2026-equivalent</strong> pass/fail verdict, plain-English WCAG 2.1 AA failure explanations, and an instant turnkey remediation quote.
+    Validate any municipal, university, healthcare, or agency PDF against real <strong>veraPDF 1.30.3</strong> rules. Review plain-English clause diagnostics and turnkey remediation pricing with zero file retention.
   </p>
 
+  <input type="file" id="file-input" accept="application/pdf,.pdf" aria-label="Select PDF file up to 20 megabytes" tabindex="-1" style="display:none">
   <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload PDF file up to 20 megabytes">
-    <input type="file" id="file-input" accept="application/pdf,.pdf" style="display:none">
-    <div style="font-size:2.1rem;">📄</div>
-    <h2>Drop a PDF here or click to run instant PDF/UA-1 audit</h2>
-    <p>Checks ISO 14289-1 tags, Reading Order, Alt-Text, Table Scopes, AcroForm /TU Tooltips, Fonts &amp; Scanned OCR</p>
-    <span class="btn btn-brand">Select PDF to Validate (Max 20 MB)</span>
-    <div class="privacy-strip">
-      <span>🔒 Zero Cloud Retention — Deleted Immediately After Scan</span>
-      <span>⚡ Full veraPDF 1.30.3 Java Engine</span>
-      <span>💵 100% Free &middot; No Sign-Up Required</span>
+    <div class="chk-icon" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
     </div>
+    <h2>Drop a PDF here, or click to run an instant PDF/UA-1 audit</h2>
+    <p>Evaluates ISO 14289-1 tags, reading order, figure alt text, table header scopes, AcroForm /TU tooltips, font encoding, and scanned text layers.</p>
+    <span class="btn btn-primary">Select PDF to Validate (Max 20 MB)</span>
+  </div>
+  <div class="privacy-strip">
+    <span>Zero file retention &mdash; deleted immediately after scan</span>
+    <span>Real veraPDF 1.30.3 Java engine</span>
+    <span>Free &middot; No sign-up required</span>
   </div>
 
-  <div id="status-box">⏳ Running veraPDF 1.30.3 ISO 14289-1 (PDF/UA-1) &amp; Structural Inspection...</div>
-  <div id="error-box"></div>
+  <div id="status-box" role="status" aria-live="polite">Running veraPDF 1.30.3 ISO 14289-1 (PDF/UA-1) &amp; structural inspection&hellip;</div>
+  <div id="error-box" role="alert"></div>
 
   <div id="results">
     <div class="card">
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+      <div class="result-head">
         <div>
           <span id="verdict-pill" class="pill pill-err">NON-COMPLIANT</span>
-          <h2 id="doc-title" style="margin:8px 0 2px;">document.pdf</h2>
-          <div id="engine-line" class="mono" style="color:var(--muted);"></div>
+          <h2 id="doc-title" style="margin:8px 0 2px; font-size:1.35rem;">document.pdf</h2>
+          <div id="engine-line" class="mono"></div>
         </div>
-        <button type="button" class="btn btn-sec" id="btn-download-report">Download HTML Audit Report &darr;</button>
+        <button type="button" class="btn btn-sec btn-sm" id="btn-download-report">Download HTML Audit Report</button>
       </div>
 
       <div class="kpi-grid">
@@ -775,13 +972,13 @@ INDEX_HTML = r"""<!doctype html>
           <div class="hint" id="kpi-tier">Born-Digital Text</div>
         </div>
         <div class="kpi">
-          <div class="lbl">Turnkey Fix Quote</div>
-          <div class="val" id="kpi-quote" style="color:#86efac;">$65</div>
+          <div class="lbl">Turnkey Package</div>
+          <div class="val brand" id="kpi-quote">$65</div>
           <div class="hint" id="kpi-wholesale">Agency Wholesale: $35</div>
         </div>
         <div class="kpi">
           <div class="lbl">Privacy Verification</div>
-          <div class="val" style="color:var(--brand); font-size:1.25rem;">0 Retained</div>
+          <div class="val ok" style="font-size:1.3rem;">0 Retained</div>
           <div class="hint">Ephemeral file purged after scan</div>
         </div>
       </div>
@@ -790,35 +987,35 @@ INDEX_HTML = r"""<!doctype html>
     </div>
 
     <div class="cta-banner" id="cta-banner">
-      <span class="pill pill-ok">100% Bit-Identical Layout Guaranteed &middot; 0 Failed veraPDF Rules</span>
-      <h2 id="cta-headline" style="margin:10px 0 6px;">Need this PDF remediated to 100% Green PDF/UA-1 &amp; PAC 2026?</h2>
-      <p id="cta-sub" style="margin:0; color:#cbd5e1;"></p>
+      <span class="pill pill-ok">Pixel-Identical Layout &middot; 0 Failed veraPDF 1.30.3 Rules</span>
+      <h2 id="cta-headline" style="margin:10px 0 6px; font-size:1.3rem;">Need this PDF remediated to 0 failed PDF/UA-1 rules?</h2>
+      <p id="cta-sub" style="margin:0; color:var(--ink-2); font-size:0.95rem;"></p>
       <div class="cta-row">
-        <a id="cta-checkout" class="btn btn-primary" href="#" target="_blank" rel="noopener">Instant Checkout ($65) &rarr;</a>
-        <a id="cta-upwork" class="btn btn-sec" href="#" target="_blank" rel="noopener">Order via Upwork Escrow &rarr;</a>
-        <a id="cta-form" class="btn btn-brand" href="#" target="_blank" rel="noopener">Request Free 24h Sample PDF Fix</a>
-        <a id="cta-mailto" class="btn btn-sec" href="#">Email Exact Quote Breakdown</a>
+        <a id="cta-checkout" class="btn btn-primary" href="#" target="_blank" rel="noopener">Order Turnkey Package ($65)</a>
+        <a id="cta-upwork" class="btn btn-sec" href="#" target="_blank" rel="noopener">Order via Upwork Escrow</a>
+        <a id="cta-form" class="btn btn-sec" href="#" target="_blank" rel="noopener">Request Free 24h Sample</a>
+        <a id="cta-mailto" class="btn btn-sec" href="#">Email Quote Breakdown</a>
       </div>
-      <p style="margin:10px 0 0; font-size:0.8rem; color:var(--muted);">🔒 Secure checkout by Gumroad</p>
+      <p class="mor-note">Secure checkout by Gumroad</p>
     </div>
 
     <div class="card">
-      <h3 style="margin-top:0;">Plain-English ADA Title II / ISO 14289-1 Diagnostic Findings</h3>
+      <h2 style="margin-top:0; font-size:1.25rem;">Plain-English ISO 14289-1 &amp; WCAG 2.1 AA Diagnostic Findings</h2>
       <div id="issues-list"></div>
     </div>
   </div>
 
   <footer>
     <p>
-      <strong>Privacy &amp; Technical Scope Notice:</strong> Uploaded files (max 20 MB) are processed inside an isolated ephemeral directory and permanently deleted before this page receives your report. Passing automated ISO 14289-1 (PDF/UA-1) rules in veraPDF 1.30 / PAC 2026 verifies machine structure, tags, metadata, and fonts; full WCAG 2.1 AA compliance also includes human review of alt-text meaning, reading order, and NVDA screen-reader navigation (included in every turnkey remediation package).
+      <strong>Privacy &amp; Technical Scope Notice:</strong> Uploaded files (max 20 MB) are processed inside an isolated ephemeral directory and permanently deleted before this page receives your report. Passing automated ISO 14289-1 (PDF/UA-1) rules in veraPDF 1.30.3 verifies machine structure, tags, metadata, and fonts; full WCAG 2.1 AA compliance also requires human review of alt-text accuracy and logical reading order in NVDA. Technical compliance engineering service &mdash; not legal advice.
     </p>
     <p>
-      Operated by <strong>Loc Nguyen — PDF/UA Partner Desk</strong> &middot;
-      <a href="https://hadesloc.github.io/pdfua-partner-desk/" target="_blank" rel="noopener">Agency Wholesale Storefront</a> &middot;
+      Operated by <strong>Loc Nguyen &mdash; PDF/UA Partner Desk</strong> (Vietnam) &middot;
+      <a href="https://hadesloc.github.io/pdfua-partner-desk/">Storefront &amp; Wholesale Desk</a> &middot;
       <a href="mailto:halocrypto101@gmail.com">halocrypto101@gmail.com</a>
     </p>
   </footer>
-</div>
+</main>
 
 <script>
 (function () {
@@ -851,7 +1048,7 @@ INDEX_HTML = r"""<!doctype html>
     errorBox.style.display = "none";
     resultsBox.style.display = "none";
     if (file.size > 20 * 1024 * 1024) {
-      errorBox.innerHTML = "<strong>File exceeds 20 MB limit.</strong> For large 50–500 page reports, <a href='https://docs.google.com/forms/d/e/1FAIpQLSfC50VFJdc55ug-sNpJON59JL9By6yIuRe8qysotQLX1cNtFA/viewform' target='_blank' rel='noopener'>submit your PDF link for a free workstation audit &rarr;</a>";
+      errorBox.innerHTML = "<strong>File exceeds 20 MB limit.</strong> For large 50&ndash;500 page reports, <a href='https://docs.google.com/forms/d/e/1FAIpQLSfC50VFJdc55ug-sNpJON59JL9By6yIuRe8qysotQLX1cNtFA/viewform' target='_blank' rel='noopener'>submit your PDF link for a free workstation audit &rarr;</a>";
       errorBox.style.display = "block";
       return;
     }
@@ -886,14 +1083,14 @@ INDEX_HTML = r"""<!doctype html>
       pill.textContent = "PASS · 0 FAILED PDF/UA-1 RULES";
     } else {
       pill.className = "pill pill-err";
-      pill.textContent = "NON-COMPLIANT · FAILS ADA TITLE II / PDF/UA-1";
+      pill.textContent = "NON-COMPLIANT · FAILS PDF/UA-1";
     }
     document.getElementById("doc-title").textContent = d.filename + " (" + (d.file_size_bytes / 1024).toFixed(1) + " KB)";
     document.getElementById("engine-line").textContent = d.engine + " · Completed in " + d.elapsed_seconds + "s";
 
     const rulesEl = document.getElementById("kpi-rules");
     rulesEl.textContent = d.failed_rules;
-    rulesEl.style.color = d.is_compliant ? "var(--ok)" : "var(--err)";
+    rulesEl.className = "val " + (d.is_compliant ? "ok" : "err");
     document.getElementById("kpi-checks").textContent = Number(d.failed_checks || 0).toLocaleString("en-US") + " failed clause checks";
 
     const q = d.quote || {};
@@ -901,7 +1098,7 @@ INDEX_HTML = r"""<!doctype html>
     document.getElementById("kpi-pages").textContent = q.pages + (q.pages === 1 ? " Page" : " Pages");
     document.getElementById("kpi-tier").textContent = q.tier_label || "";
     document.getElementById("kpi-quote").textContent = fmtUsd(q.fixed_package_usd);
-    document.getElementById("kpi-wholesale").textContent = "Agency Wholesale: " + fmtUsd(q.wholesale_total_usd) + " (Retail val: " + fmtUsd(q.retail_total_usd) + ")";
+    document.getElementById("kpi-wholesale").textContent = "Agency Wholesale: " + fmtUsd(q.wholesale_total_usd) + " (Typical retail: " + fmtUsd(q.retail_total_usd) + ")";
 
     const checks = [
       [st.is_tagged, "Tagged Structure (/StructTreeRoot)"],
@@ -914,26 +1111,26 @@ INDEX_HTML = r"""<!doctype html>
       [!st.is_cryptographically_signed, st.is_cryptographically_signed ? "Cryptographic Signature Lock Detected" : "Ready for Lossless Remediation"]
     ];
     document.getElementById("struct-grid").innerHTML = checks.map(([ok, label]) =>
-      "<div class='chk'>" + (ok ? "✅ " : "❌ ") + esc(label) + "</div>"
+      "<div class='chk'><strong class='" + (ok ? "ok" : "err") + "'>" + (ok ? "Pass:" : "Issue:") + "</strong> " + esc(label) + "</div>"
     ).join("");
 
     document.getElementById("cta-headline").textContent = d.is_compliant
-      ? "Machine Checks Passed! Need Human PAC 2026 + NVDA Certification or Backlog Pricing?"
-      : "Fix \"" + d.filename + "\" (" + q.pages + "p) to 0 Failed Rules — " + fmtUsd(q.wholesale_total_usd) + " Agency Wholesale or " + fmtUsd(q.fixed_package_usd) + " Direct";
+      ? "Automated Rules Passed — Need Human NVDA Reading-Order Verification or Backlog Pricing?"
+      : "Remediate \"" + d.filename + "\" (" + q.pages + "p) to 0 Failed Rules — " + fmtUsd(q.wholesale_total_usd) + " Wholesale or " + fmtUsd(q.fixed_package_usd) + " Direct";
     document.getElementById("cta-sub").textContent =
-      "Includes 100% pixel-identical visual layout, semantic headings/tables/alt-text, veraPDF 1.30 XML (0 failed rules), PAC 2026 report, and NVDA screen-reader walkthrough. Web agencies save " +
-      fmtUsd(q.agency_net_margin_usd) + " vs. standard US retail (" + fmtUsd(q.retail_total_usd) + ") — or request a FREE 24-hour sample proof first!";
+      "Delivered with pixel-identical visual layout, semantic headings/tables/alt-text, veraPDF 1.30.3 validation report (0 failed rules), NVDA reading-order QA, and SHA-256 manifest. Agencies save " +
+      fmtUsd(q.agency_net_margin_usd) + " vs. typical US retail (" + fmtUsd(q.retail_total_usd) + ") — or request a complimentary 24-hour sample proof.";
 
     document.getElementById("cta-checkout").href = d.cta.direct_checkout_url || d.cta.upwork_catalog_url;
-    document.getElementById("cta-checkout").textContent = "Instant Checkout (" + fmtUsd(q.fixed_package_usd) + ") \u2192";
+    document.getElementById("cta-checkout").textContent = "Order Turnkey Package (" + fmtUsd(q.fixed_package_usd) + ")";
     document.getElementById("cta-upwork").href = d.cta.upwork_catalog_url;
-    document.getElementById("cta-upwork").textContent = "Order via Upwork Escrow \u2192";
+    document.getElementById("cta-upwork").textContent = "Order via Upwork Escrow";
     document.getElementById("cta-form").href = d.cta.google_form_url;
     document.getElementById("cta-mailto").href = d.cta.mailto_url;
 
     const listEl = document.getElementById("issues-list");
     if (!d.findings || d.findings.length === 0) {
-      listEl.innerHTML = "<div class='issue-item' style='border-color:rgba(34,197,94,0.5);'><strong style='color:#86efac;'>✅ Zero ISO 14289-1 (PDF/UA-1) Rule Failures Detected</strong><p style='margin:6px 0 0; color:#cbd5e1;'>This PDF passed all automated veraPDF 1.30.3 PDF/UA-1 clauses. Remember to verify semantic alt-text accuracy and logical reading order in NVDA before formal legal sign-off.</p></div>";
+      listEl.innerHTML = "<div class='issue-item issue-pass'><strong style='color:var(--ok);'>Zero ISO 14289-1 (PDF/UA-1) Rule Failures Detected</strong><p style='margin:6px 0 0; color:var(--ink-2);'>This PDF passed all automated veraPDF 1.30.3 PDF/UA-1 clauses. Verify semantic alt-text accuracy and logical reading order in NVDA before publishing.</p></div>";
     } else {
       listEl.innerHTML = d.findings.map((f) => {
         const pCls = f.severity === "CRITICAL" ? "pill-err" : "pill-warn";
@@ -942,8 +1139,8 @@ INDEX_HTML = r"""<!doctype html>
             "<strong>Clause " + esc(f.clause) + " — " + esc(f.title) + "</strong>" +
             "<span class='pill " + pCls + "'>" + esc(f.severity) + " · " + Number(f.failed_checks).toLocaleString("en-US") + " checks</span>" +
           "</div>" +
-          "<div class='mono' style='color:#7dd3fc; margin-top:4px;'>" + esc(f.wcag) + "</div>" +
-          "<p style='margin:8px 0 0; color:#cbd5e1; font-size:0.93rem;'><strong>User &amp; ADA Impact:</strong> " + esc(f.impact) + "</p>" +
+          "<div class='mono' style='margin-top:4px;'>" + esc(f.wcag) + "</div>" +
+          "<p style='margin:8px 0 0; color:var(--ink-2); font-size:0.93rem;'><strong>User &amp; ADA Impact:</strong> " + esc(f.impact) + "</p>" +
         "</div>";
       }).join("");
     }
@@ -958,12 +1155,12 @@ INDEX_HTML = r"""<!doctype html>
       "<tr><td><strong>ISO 14289-1 §" + esc(f.clause) + "</strong></td><td><strong>" + esc(f.title) + "</strong><br><small>" + esc(f.wcag) + "</small></td><td>" + esc(f.impact) + "</td><td>" + f.failed_checks + "</td></tr>"
     ).join("") || "<tr><td colspan='4'>0 failed rules detected in veraPDF 1.30.3.</td></tr>";
     const htmlDoc = "<!doctype html><html lang='en'><head><meta charset='utf-8'><title>PDF/UA-1 Audit Report — " + esc(d.filename) + "</title>" +
-      "<style>body{font-family:sans-serif;max-width:960px;margin:32px auto;padding:0 20px;color:#0f172a;line-height:1.5}table{width:100%;border-collapse:collapse;margin:18px 0}th,td{border:1px solid #cbd5e1;padding:10px;text-align:left;vertical-align:top}th{background:#f1f5f9}.box{background:#eff6ff;border:2px solid #2563eb;border-radius:10px;padding:18px;margin:20px 0}</style></head><body>" +
+      "<style>body{font-family:sans-serif;max-width:960px;margin:32px auto;padding:0 20px;color:#0f172a;line-height:1.5}table{width:100%;border-collapse:collapse;margin:18px 0}th,td{border:1px solid #cbd5e1;padding:10px;text-align:left;vertical-align:top}th{background:#f1f5f9}.box{background:#eff6ff;border:1px solid #bfdbfe;border-left:4px solid #1d4ed8;border-radius:8px;padding:18px;margin:20px 0}</style></head><body>" +
       "<h1>ADA Title II &amp; ISO 14289-1 (PDF/UA-1) Audit Report</h1>" +
       "<p><strong>File:</strong> " + esc(d.filename) + " (" + d.quote.pages + " pages) &middot; <strong>Verdict:</strong> " + (d.is_compliant ? "PASS (0 Failed Rules)" : "NON-COMPLIANT (" + d.failed_rules + " Failed Rules / " + d.failed_checks + " Failed Checks)") + "</p>" +
       "<div class='box'><strong>Turnkey Remediation Quote (" + esc(d.quote.tier_label) + "):</strong> " + fmtUsd(d.quote.wholesale_total_usd) + " White-Label Agency Wholesale (or " + fmtUsd(d.quote.fixed_package_usd) + " Fixed Package).<br>" +
       "Request Free 24h Sample: <a href='" + esc(d.cta.google_form_url) + "'>" + esc(d.cta.google_form_url) + "</a> &middot; Upwork Escrow: <a href='" + esc(d.cta.upwork_catalog_url) + "'>" + esc(d.cta.upwork_catalog_url) + "</a> &middot; Direct: halocrypto101@gmail.com</div>" +
-      "<table><thead><tr><th>Clause</th><th>Issue &amp; WCAG Criterion</th><th>Assistive Tech Impact</th><th>Failed Checks</th></tr></thead><tbody>" + rows + "</tbody></table>" +
+      "<table><thead><tr><th scope='col'>Clause</th><th scope='col'>Issue &amp; WCAG Criterion</th><th scope='col'>Assistive Tech Impact</th><th scope='col'>Failed Checks</th></tr></thead><tbody>" + rows + "</tbody></table>" +
       "</body></html>";
     const blob = new Blob([htmlDoc], { type: "text/html;charset=utf-8" });
     const a = document.createElement("a");
