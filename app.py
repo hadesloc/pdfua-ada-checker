@@ -26,6 +26,8 @@ GOOGLE_FORM_URL = (
     "https://docs.google.com/forms/d/e/1FAIpQLSfC50VFJdc55ug-sNpJON59JL9By6yIuRe8qysotQLX1cNtFA/viewform"
 )
 UPWORK_CATALOG_URL = "https://www.upwork.com/services/product/2120536307204819908"
+CHECKOUT_65_URL = "https://www.creem.io/payment/prod_1ro2PKpF1QJQFmoZytUQR1"
+CHECKOUT_195_URL = "https://www.creem.io/payment/prod_6Ox9BnrneJMxVIXRXipyAD"
 CONTACT_EMAIL = "halocrypto101@gmail.com"
 
 CLAUSE_GUIDE: dict[str, dict[str, str]] = {
@@ -575,6 +577,13 @@ def analyze_pdf_bytes(pdf_bytes: bytes, filename: str = "document.pdf") -> dict[
         "findings": enriched["findings"],
         "quote": quote,
         "cta": {
+            "checkout_65_url": CHECKOUT_65_URL,
+            "checkout_195_url": CHECKOUT_195_URL,
+            "direct_checkout_url": (
+                CHECKOUT_65_URL
+                if quote["fixed_package_usd"] <= 65
+                else (CHECKOUT_195_URL if quote["fixed_package_usd"] <= 195 else UPWORK_CATALOG_URL)
+            ),
             "upwork_catalog_url": UPWORK_CATALOG_URL,
             "google_form_url": GOOGLE_FORM_URL,
             "storefront_url": STOREFRONT_URL,
@@ -785,7 +794,8 @@ INDEX_HTML = r"""<!doctype html>
       <h2 id="cta-headline" style="margin:10px 0 6px;">Need this PDF remediated to 100% Green PDF/UA-1 &amp; PAC 2026?</h2>
       <p id="cta-sub" style="margin:0; color:#cbd5e1;"></p>
       <div class="cta-row">
-        <a id="cta-upwork" class="btn btn-primary" href="#" target="_blank" rel="noopener">Book Fixed-Price Fix on Upwork &rarr;</a>
+        <a id="cta-checkout" class="btn btn-primary" href="#" target="_blank" rel="noopener">Instant Checkout ($65) &rarr;</a>
+        <a id="cta-upwork" class="btn btn-sec" href="#" target="_blank" rel="noopener">Order via Upwork Escrow &rarr;</a>
         <a id="cta-form" class="btn btn-brand" href="#" target="_blank" rel="noopener">Request Free 24h Sample PDF Fix</a>
         <a id="cta-mailto" class="btn btn-sec" href="#">Email Exact Quote Breakdown</a>
       </div>
@@ -913,8 +923,10 @@ INDEX_HTML = r"""<!doctype html>
       "Includes 100% pixel-identical visual layout, semantic headings/tables/alt-text, veraPDF 1.30 XML (0 failed rules), PAC 2026 report, and NVDA screen-reader walkthrough. Web agencies save " +
       fmtUsd(q.agency_net_margin_usd) + " vs. standard US retail (" + fmtUsd(q.retail_total_usd) + ") — or request a FREE 24-hour sample proof first!";
 
+    document.getElementById("cta-checkout").href = d.cta.direct_checkout_url || d.cta.upwork_catalog_url;
+    document.getElementById("cta-checkout").textContent = "Instant Checkout (" + fmtUsd(q.fixed_package_usd) + ") \u2192";
     document.getElementById("cta-upwork").href = d.cta.upwork_catalog_url;
-    document.getElementById("cta-upwork").textContent = "Order Turnkey Fix (" + fmtUsd(q.fixed_package_usd) + ") on Upwork \u2192";
+    document.getElementById("cta-upwork").textContent = "Order via Upwork Escrow \u2192";
     document.getElementById("cta-form").href = d.cta.google_form_url;
     document.getElementById("cta-mailto").href = d.cta.mailto_url;
 
