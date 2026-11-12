@@ -168,7 +168,7 @@ def _run_verapdf(pdf_path: Path) -> dict[str, Any]:
     java_bin, jar_path = discovered
     cmd = [
         java_bin,
-        "-Xmx512m",
+        "-Xmx360m",
         "-Dfile.encoding=UTF8",
         "-XX:+IgnoreUnrecognizedVMOptions",
         "--add-exports=java.base/sun.security.pkcs=ALL-UNNAMED",
