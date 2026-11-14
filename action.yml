@@ -1,0 +1,50 @@
+name: "PDF/UA & ADA Title II PDF Accessibility Checker"
+author: "Loc Nguyen (PDF/UA Partner Desk)"
+description: "Validate repository PDFs against ISO 14289-1 (PDF/UA-1), WCAG 2.1 AA, and ADA Title II using veraPDF 1.30.3."
+branding:
+  icon: "check-circle"
+  color: "blue"
+
+inputs:
+  pdf-path:
+    description: "Directory, single PDF path, or glob pattern to scan (relative to repository root)."
+    required: false
+    default: "."
+  api-url:
+    description: "Zero-retention veraPDF 1.30.3 validation endpoint."
+    required: false
+    default: "https://pdfua-ada-checker.onrender.com/api/check"
+  fail-on-violations:
+    description: "Fail the workflow step ('true' or 'false') when one or more PDFs fail PDF/UA-1 rules."
+    required: false
+    default: "true"
+  max-files:
+    description: "Maximum number of PDF files to validate per run (up to 20 MB per file)."
+    required: false
+    default: "20"
+
+outputs:
+  total-pdfs:
+    description: "Total number of PDF documents audited."
+    value: ${{ steps.check.outputs.total-pdfs }}
+  failing-pdfs:
+    description: "Number of PDF documents with ISO 14289-1 (PDF/UA-1) rule violations."
+    value: ${{ steps.check.outputs.failing-pdfs }}
+  failed-rules:
+    description: "Aggregate count of failed ISO 14289-1 rules across all audited PDFs."
+    value: ${{ steps.check.outputs.failed-rules }}
+
+runs:
+  using: "composite"
+  steps:
+    - id: check
+      name: Run PDF/UA-1 & ADA Title II check
+      shell: bash
+      env:
+        INPUT_PDF_PATH: ${{ inputs.pdf-path }}
+        INPUT_API_URL: ${{ inputs.api-url }}
+        INPUT_FAIL_ON_VIOLATIONS: ${{ inputs.fail-on-violations }}
+        INPUT_MAX_FILES: ${{ inputs.max-files }}
+      run: |
+        PY_BIN=$(command -v python3 || command -v python)
+        "$PY_BIN" "${{ github.action_path }}/action_runner.py"
